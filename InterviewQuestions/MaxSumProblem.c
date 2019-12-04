@@ -1,4 +1,11 @@
 //Maximum sum Problem
+/*
+Divide given number t0 n/2, n/3, n/4 and sum them up. Furthur sub divide n/2 and get max sum
+IP = 12, OP = 13
+We break n = 12 in three parts {12/2, 12/3, 12/4} = {6, 4, 3},  now current sum is = (6 + 4 + 3) = 13
+Again, we break 6 = {6/2, 6/3, 6/4} = {3, 2, 1} = 3 + 2 + 1 = 6 and further breaking 3, 2 and 1 we get maximum
+summation as 1, so breaking 6 in three parts produces maximum sum 6 only similarly breaking 4 in three parts we can get maximum sum 4 and same for 3 also. Thus maximum sum by breaking number in parts  is=13
+*/
 #include<stdio.h>
 
 int maxSumRecursive(int);
