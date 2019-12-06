@@ -1,12 +1,18 @@
 #include<stdio.h>
 #include<stdlib.h>
-  
+#define SIZE 20
+
 struct node
 {
     int data;
     struct node* left;
     struct node* right;
 };
+
+struct node* items[SIZE];
+int front = -1, rear = -1;
+void enQueue(struct node*);
+struct node* deQueue();
 
 struct node* createNode(int value){
     struct node* newNode = malloc(sizeof(struct node));
@@ -48,6 +54,23 @@ void postorder(struct node* root) {
     printf("%d ->", root->data);
 }
 
+void level_order_traversal(struct node* root)
+{
+	if(root == NULL)
+		return;
+	enQueue(root);
+	struct node* temp=deQueue();
+	while(temp!=NULL)
+	{
+		printf("%d ",temp->data);
+		if(temp->left!=NULL)
+			enQueue(temp->left);
+		if(temp->right)
+			enQueue(temp->right);
+		temp=deQueue();	
+	}
+}
+
 void mirror(struct node* root){
 	if(root == NULL){
 		return;
@@ -76,4 +99,30 @@ int main(){
 	printf("\n");
 	mirror(root);
 	inorder(root);
+	printf("Level order traversal\n");
+	level_order_traversal(root);
+}
+
+void enQueue(struct node* value){
+    if(rear == SIZE-1)
+        printf("\nQueue is Full!!");
+    else {
+        if(front == -1)
+            front = 0;
+        rear++;
+        items[rear] = value;
+        // printf("\nInserted -> %d", value);
+    }
+}
+struct node* deQueue(){
+    if(front == -1)
+        printf("\nQueue is Empty!!");
+    else{
+        // printf("\nDeleted : %d", items[front]);		
+        int temp = front;
+		front++;
+        if(front > rear)
+            front = rear = -1;
+		return items[temp];
+    }
 }
