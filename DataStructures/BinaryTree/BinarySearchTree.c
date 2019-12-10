@@ -11,7 +11,9 @@ struct node
 
 struct node* items[SIZE];
 int front = -1, rear = -1;
+
 void enQueue(struct node*);
+
 struct node* deQueue();
 
 struct node* createNode(int value){

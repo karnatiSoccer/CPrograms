@@ -2,47 +2,72 @@
 #include <string.h>
 #include <stdlib.h>
 
+// Fills lps[] for given patttern pat[0..M-1] 
+void computeLPSArray(char* pat, int M, int* lps) 
+{ 
+    // length of the previous longest prefix suffix 
+    int len = 0; 
+  
+    lps[0] = 0; // lps[0] is always 0 
+  
+    // the loop calculates lps[i] for i = 1 to M-1 
+    int i = 1; 
+    while (i < M) { 
+        if (pat[i] == pat[len]) { 
+            len++; 
+            lps[i] = len; 
+            i++; 
+        } 
+        else // (pat[i] != pat[len]) 
+        { 
+            // This is tricky. Consider the example. 
+            // AAACAAAA and i = 7. The idea is similar 
+            // to search step. 
+            if (len != 0) { 
+                len = lps[len - 1]; 
+  
+                // Also, note that we do not increment 
+                // i here 
+            } 
+            else // if (len == 0) 
+            { 
+                lps[i] = 0; 
+                i++; 
+            } 
+        } 
+    } 
+} 
+
 // Function to implement KMP algorithm
-void KMP(const char* X, const char* Y, int m, int n)
+void KMP(char* str, char* pattern, int m, int n)
 {
-	// Base Case 1: Y is NULL or empty
-	if (*Y == '\0' || n == 0)
+	// Base Case 1: pattern is NULL or empty
+	if (*pattern == '\0' || n == 0)
 		printf("Pattern occurs with shift 0");
 
-	// Base Case 2: X is NULL or X's length is less than that of Y's
-	if (*X == '\0' || n > m)
+	// Base Case 2: str is NULL or str's length is less than that of pattern's
+	if (*str == '\0' || n > m)
 		printf("Pattern not found");
 
-	// next[i] stores the index of next best partial match
-	int next[n + 1];
-
+	// lps[i] stores the index of lps best partial match
+	int lps[n]; // Longest proper prefix
+	
 	for (int i = 0; i < n + 1; i++)
-		next[i] = 0;
-
-	for (int i = 1; i < n; i++)
-	{	
-		
-		int j = next[i + 1];
-		// printf("i : %d, j : %d\n", i, j);
-		// printf("y[j] : %c, y[i] : %c \n", Y[j], Y[i]);
-		
-		while (j > 0 && Y[j] != Y[i])
-			j = next[j];
-
-		if (j > 0 || Y[j] == Y[i])
-			next[i + 1] = j + 1;
-	}
-
+		lps[i] = 0;
+	
+	// Preprocess the pattern (calculate lps[] array) 
+    computeLPSArray(pattern, n, lps); 
+	
 	for (int i = 0, j = 0; i < m; i++)
 	{
-		if (*(X + i) == *(Y + j))
+		if (*(str + i) == *(pattern + j))
 		{
 			if (++j == n)
 				printf("Pattern occurs with shift %d\n", i - j + 1);
 		}
 		else if (j > 0) {
-			j = next[j];
-			i--;	// since i will be incremented in next iteration
+			j = lps[j];
+			i--;	// since i will be incremented in lps iteration
 		}
 	}
 }
@@ -51,7 +76,7 @@ void KMP(const char* X, const char* Y, int m, int n)
 int main(void)
 {
 	char* text = "ABCABAABCACAC";
-	char* pattern = "CACA";
+	char* pattern = "ABC";
 
 	int n = strlen(text);
 	int m = strlen(pattern);

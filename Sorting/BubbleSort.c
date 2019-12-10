@@ -48,11 +48,11 @@ int main()
 /*#include <stdio.h>
 void bubbleSort(int arrayay[], int size)
 {
-  for (int step = 0; step & lt; size - 1; ++step)
+  for (int step = 0; step < size - 1; ++step)
   {
     // The variable "swapped" is introduced for optimization.
     int swapped = 0;
-    for (int i = 0; i & lt; size - step - 1; ++i)
+    for (int i = 0; i < size - step - 1; ++i)
     {
       // To sort in descending order, change > to < in this line.
       if (arrayay[i] > arrayay[i + 1])
